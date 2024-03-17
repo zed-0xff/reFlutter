@@ -17,15 +17,17 @@ if (exists == 1) {
 
     fread(application_id, sizeof(application_id), 1, cmdline);
     snprintf(pat, sizeof(pat), "/data/data/%s/dump.dart", application_id);
-    do {
+    {
       FILE *f = fopen(pat, "a+");
-      fprintf(f, "%s", classText);
+      flock(fileno(f), LOCK_EX);
+      fputs(f, classText);
       fflush(f);
+      flock(fileno(f), LOCK_UN);
       fclose(f);
       snprintf(chm, sizeof(chm), "/data/data/%s", application_id);
       chmod(chm, S_IRWXU | S_IRWXG | S_IRWXO);
       chmod(pat, S_IRWXU | S_IRWXG | S_IRWXO);
-    } while (0);
+    }
     fclose(cmdline);
   }
 }
