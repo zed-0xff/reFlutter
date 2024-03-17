@@ -245,9 +245,12 @@ def replaceFileText(fname, textOrig, textReplace):
 
 def replaceFileFile(fname, textOrig, fnameReplace):
     script_dir = os.path.dirname(__file__)
-    pathnameReplace = os.path.join(script_dir, fnameReplace)
-    with open(pathnameReplace, 'r') as file:
-        replaceFileText(fname, textOrig, file.read())
+    textReplace = ''
+    with open(os.path.join(script_dir, fnameReplace), 'r') as file:
+        textReplace += file.read()
+    with open(os.path.join(script_dir, 'common.cc'), 'r') as file:
+        textReplace += file.read()
+    replaceFileText(fname, textOrig, textReplace)
 
 
 def patchSource(hashS, ver):
